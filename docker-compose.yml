@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  # MCP Server - Python application
+  mcp-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: mcp-chrome-server
+    ports:
+      - "8012:8012"  # WebSocket and HTTP API
+    environment:
+      - WEBSOCKET_PORT=8012
+      - CHROME_PROFILE_PATH=/chrome-profile
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - LOG_LEVEL=INFO
+      - RAG_ENDPOINT=http://elasticsearch:9200
+      - REDIS_URL=redis://redis:6379
+      - MAX_CONCURRENT_REQUESTS=10
+      - CLAUDE_MODEL=claude-4-opus
+      - BROKEN_LINK_TIMEOUT=5
+    volumes:
+      - ./server:/app
+      - ${CHROME_PROFILE_PATH:-~/.config/google-chrome/Default}:/chrome-profile:ro
+      - ./logs:/app/logs
+    depends_on:
+      - elasticsearch
+      - redis
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8012/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ElasticSearch for RAG
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: mcp-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - cluster.name=mcp-cluster
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: mcp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: Nginx reverse proxy for production
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: mcp-nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./nginx/ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - mcp-server
+  #   networks:
+  #     - mcp-network
+  #   restart: unless-stopped
+
+networks:
+  mcp-network:
+    driver: bridge
+
+volumes:
+  es-data:
+    driver: local
+  redis-data:
+    driver: local
