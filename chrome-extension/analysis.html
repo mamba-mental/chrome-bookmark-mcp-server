@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmark Analysis - MCP Bookmark Manager</title>
+    <link rel="stylesheet" href="styles/analysis.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bookmark Analysis</h1>
+            <p class="subtitle">AI-powered insights into your bookmark collection</p>
+        </header>
+
+        <div class="analysis-grid">
+            <!-- Overview Card -->
+            <div class="analysis-card">
+                <h2>Overview</h2>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-value" id="totalBookmarks">-</span>
+                        <span class="stat-label">Total Bookmarks</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="totalFolders">-</span>
+                        <span class="stat-label">Folders</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="avgAge">-</span>
+                        <span class="stat-label">Avg Age (days)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Card -->
+            <div class="analysis-card">
+                <h2>Top Categories</h2>
+                <div id="categoriesChart" class="chart-container">
+                    <!-- Chart will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Domains Card -->
+            <div class="analysis-card">
+                <h2>Top Domains</h2>
+                <div id="domainsChart" class="chart-container">
+                    <!-- Chart will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Issues Card -->
+            <div class="analysis-card">
+                <h2>Issues Found</h2>
+                <div class="issues-list">
+                    <div class="issue-item">
+                        <span class="issue-icon warning">⚠️</span>
+                        <span class="issue-text"><span id="duplicateCount">0</span> duplicate bookmarks</span>
+                    </div>
+                    <div class="issue-item">
+                        <span class="issue-icon error">❌</span>
+                        <span class="issue-text"><span id="brokenCount">0</span> broken links</span>
+                    </div>
+                    <div class="issue-item">
+                        <span class="issue-icon info">ℹ️</span>
+                        <span class="issue-text"><span id="oldCount">0</span> old bookmarks (>1 year)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Card -->
+            <div class="analysis-card full-width">
+                <h2>AI Insights</h2>
+                <div id="aiInsights" class="ai-insights">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Analyzing your bookmarks...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="refreshAnalysis" class="btn primary">Refresh Analysis</button>
+            <button id="exportReport" class="btn secondary">Export Report</button>
+        </div>
+    </div>
+
+    <script src="analysis.js"></script>
+</body>
+</html>

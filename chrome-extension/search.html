@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Bookmarks - MCP Bookmark Manager</title>
+    <link rel="stylesheet" href="styles/search.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Search Bookmarks</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search bookmarks..." autofocus>
+                <button id="searchBtn" class="search-btn">Search</button>
+            </div>
+        </header>
+
+        <div class="filters">
+            <select id="folderFilter">
+                <option value="">All Folders</option>
+            </select>
+            <select id="dateFilter">
+                <option value="">Any Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+            </select>
+            <label>
+                <input type="checkbox" id="aiSearch">
+                AI-Enhanced Search
+            </label>
+        </div>
+
+        <div class="results-container">
+            <div class="results-header">
+                <span id="resultCount">0 results</span>
+                <div class="sort-options">
+                    <label>Sort by:</label>
+                    <select id="sortBy">
+                        <option value="relevance">Relevance</option>
+                        <option value="date">Date</option>
+                        <option value="title">Title</option>
+                        <option value="visits">Most Visited</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="searchResults" class="search-results">
+                <!-- Results will be displayed here -->
+            </div>
+        </div>
+
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Searching...</p>
+        </div>
+    </div>
+
+    <script src="search.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Bookmark Manager - Settings</title>
+    <link rel="stylesheet" href="styles/options.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MCP Bookmark Manager Settings</h1>
+            <p class="subtitle">Configure your AI-powered bookmark management preferences</p>
+        </header>
+
+        <main>
+            <!-- Server Configuration -->
+            <section class="settings-section">
+                <h2>Server Configuration</h2>
+                <div class="form-group">
+                    <label for="serverUrl">MCP Server URL</label>
+                    <input type="text" id="serverUrl" placeholder="http://localhost:8012">
+                    <span class="helper-text">The URL of your MCP bookmark server</span>
+                </div>
+                <button id="testConnection" class="btn secondary">Test Connection</button>
+            </section>
+
+            <!-- Organization Settings -->
+            <section class="settings-section">
+                <h2>Auto-Organization</h2>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="autoOrganize">
+                        Enable automatic bookmark organization
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="organizationStrategy">Organization Strategy</label>
+                    <select id="organizationStrategy">
+                        <option value="ai_smart">AI Smart (Recommended)</option>
+                        <option value="category">By Category</option>
+                        <option value="domain">By Domain</option>
+                        <option value="date">By Date</option>
+                        <option value="alphabetical">Alphabetical</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Cleanup Settings -->
+            <section class="settings-section">
+                <h2>Cleanup Preferences</h2>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="autoClean">
+                        Enable automatic cleanup
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="maxAge">Remove bookmarks older than</label>
+                    <input type="number" id="maxAge" min="30" max="365" value="180">
+                    <span class="helper-text">days (30-365)</span>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="checkBrokenLinks" checked>
+                        Check for broken links
+                    </label>
+                </div>
+            </section>
+
+            <!-- Notification Settings -->
+            <section class="settings-section">
+                <h2>Notifications</h2>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="notificationsEnabled" checked>
+                        Show notifications
+                    </label>
+                </div>
+            </section>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button id="saveSettings" class="btn primary">Save Settings</button>
+                <button id="resetSettings" class="btn secondary">Reset to Defaults</button>
+            </div>
+        </main>
+
+        <div class="notification" id="notification">
+            <span class="notification-text" id="notificationText"></span>
+        </div>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>
