@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Bookmark Manager</title>
+    <link rel="stylesheet" href="styles/popup.css">
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <span class="status-indicator" id="statusIndicator"></span>
+            MCP Bookmarks
+        </h1>
+        <a href="#" class="settings-link" id="settingsLink">⚙️</a>
+    </div>
+
+    <div class="container">
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalBookmarks">-</div>
+                <div class="stat-label">Total Bookmarks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalFolders">-</div>
+                <div class="stat-label">Folders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="duplicatesCount">-</div>
+                <div class="stat-label">Duplicates</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="brokenLinks">-</div>
+                <div class="stat-label">Broken Links</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="quick-action" id="quickSave">
+                <div class="quick-action-icon">⭐</div>
+                <div class="quick-action-label">Save Page</div>
+            </div>
+            <div class="quick-action" id="quickSearch">
+                <div class="quick-action-icon">🔍</div>
+                <div class="quick-action-label">Search</div>
+            </div>
+            <div class="quick-action" id="quickAnalyze">
+                <div class="quick-action-icon">📊</div>
+                <div class="quick-action-label">Analyze</div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn" id="organizeBtn">
+                <span class="btn-icon">🤖</span>
+                <span>Organize with AI</span>
+                <span class="loading-spinner" style="display: none;"></span>
+            </button>
+            <button class="btn secondary" id="cleanBtn">
+                <span class="btn-icon">🧹</span>
+                <span>Clean Old Bookmarks</span>
+            </button>
+            <button class="btn secondary" id="exportBtn">
+                <span class="btn-icon">📤</span>
+                <span>Export Bookmarks</span>
+            </button>
+        </div>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Recent Bookmarks -->
+        <div class="recent-bookmarks">
+            <div class="section-header">
+                <h2 class="section-title">Recent Bookmarks</h2>
+                <a href="#" id="viewAllLink" style="font-size: 12px; color: var(--primary-color); text-decoration: none;">View All</a>
+            </div>
+            <div class="bookmark-list" id="bookmarkList">
+                <!-- Bookmarks will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span class="notification-icon" id="notificationIcon"></span>
+        <span class="notification-text" id="notificationText"></span>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "manifest_version": 3,
+  "name": "MCP Chrome Bookmark Manager",
+  "version": "1.0.0",
+  "description": "AI-powered bookmark management with Claude via Model Context Protocol",
+  "author": "Gen-PRIME-X",
+  
+  "permissions": [
+    "bookmarks",
+    "storage",
+    "tabs",
+    "notifications",
+    "alarms",
+    "contextMenus"
+  ],
+  
+  "host_permissions": [
+    "http://localhost:8012/*",
+    "ws://localhost:8012/*",
+    "*://*/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "MCP Bookmark Manager",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "options_page": "options.html",
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'self' http://localhost:8012 ws://localhost:8012;"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "styles/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  
+  "commands": {
+    "organize-bookmarks": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+O",
+        "mac": "Command+Shift+O"
+      },
+      "description": "Organize bookmarks with AI"
+    },
+    "quick-save": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Quick save current page with smart categorization"
+    },
+    "search-bookmarks": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "Search bookmarks with AI"
+    }
+  },
+  
+  "minimum_chrome_version": "102",
+  
+  "offline_enabled": false,
+  
+  "omnibox": {
+    "keyword": "bm"
+  }
+}
