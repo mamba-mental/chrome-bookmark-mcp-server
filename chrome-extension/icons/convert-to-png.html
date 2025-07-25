@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG to PNG Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2563eb;
+        }
+        .icon-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .icon-box {
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .icon-box h3 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+        canvas {
+            border: 1px solid #e2e8f0;
+            display: block;
+            margin: 10px auto;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .instructions {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SVG to PNG Icon Converter</h1>
+    
+    <div class="instructions">
+        <h2>Instructions:</h2>
+        <ol>
+            <li>The SVG icons will be automatically converted to PNG format below</li>
+            <li>Right-click on each canvas and select "Save image as..."</li>
+            <li>Save with the corresponding filename (e.g., icon16.png)</li>
+            <li>Or click the "Download" button under each icon</li>
+        </ol>
+    </div>
+    
+    <div class="icon-container" id="iconContainer">
+        <!-- Icons will be inserted here -->
+    </div>
+    
+    <script>
+        const iconSizes = [16, 32, 48, 128];
+        
+        async function convertSvgToPng(svgPath, size) {
+            try {
+                const response = await fetch(svgPath);
+                const svgText = await response.text();
+                
+                const img = new Image();
+                const blob = new Blob([svgText], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                
+                return new Promise((resolve, reject) => {
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = size;
+                        canvas.height = size;
+                        const ctx = canvas.getContext('2d');
+                        
+                        ctx.drawImage(img, 0, 0, size, size);
+                        URL.revokeObjectURL(url);
+                        
+                        resolve(canvas);
+                    };
+                    
+                    img.onerror = reject;
+                    img.src = url;
+                });
+            } catch (error) {
+                console.error(`Error converting ${svgPath}:`, error);
+                return null;
+            }
+        }
+        
+        function downloadCanvas(canvas, filename) {
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        async function loadIcons() {
+            const container = document.getElementById('iconContainer');
+            
+            for (const size of iconSizes) {
+                const svgPath = `icon${size}.svg`;
+                const canvas = await convertSvgToPng(svgPath, size);
+                
+                if (canvas) {
+                    const box = document.createElement('div');
+                    box.className = 'icon-box';
+                    
+                    const title = document.createElement('h3');
+                    title.textContent = `icon${size}.png`;
+                    box.appendChild(title);
+                    
+                    const sizeInfo = document.createElement('p');
+                    sizeInfo.textContent = `${size}x${size}px`;
+                    sizeInfo.style.color = '#64748b';
+                    sizeInfo.style.margin = '5px 0';
+                    box.appendChild(sizeInfo);
+                    
+                    box.appendChild(canvas);
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = 'Download';
+                    downloadBtn.onclick = () => downloadCanvas(canvas, `icon${size}.png`);
+                    box.appendChild(downloadBtn);
+                    
+                    container.appendChild(box);
+                } else {
+                    const box = document.createElement('div');
+                    box.className = 'icon-box';
+                    box.innerHTML = `<h3>icon${size}.png</h3><p style="color: #ef4444;">Failed to load SVG</p>`;
+                    container.appendChild(box);
+                }
+            }
+        }
+        
+        // Load icons when page loads
+        loadIcons();
+    </script>
+</body>
+</html>
